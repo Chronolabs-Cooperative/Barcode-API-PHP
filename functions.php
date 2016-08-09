@@ -118,28 +118,31 @@ if (!function_exists("getIPIdentity")) {
 		
 		if (!isset($_SESSION['ip-identity']))
 		{
-			$uris = cleanWhitespaces(file($file = __DIR__ . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "lookups.diz"));
-			shuffle($uris); shuffle($uris); shuffle($uris); shuffle($uris);
-			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE || FILTER_FLAG_NO_RES_RANGE) === false)
+			if (API_NETWORK_LOGISTICS==true)
 			{
-				$data = array();
-				foreach($uris as $uri)
+				$uris = cleanWhitespaces(file($file = __DIR__ . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "lookups.diz"));
+				shuffle($uris); shuffle($uris); shuffle($uris); shuffle($uris);
+				if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE || FILTER_FLAG_NO_RES_RANGE) === false)
 				{
-					if ($data['ip']==$ip || $data['country']['iso'] == "-" || empty($data))
-						$data = json_decode(getURIData(sprintf($uri, 'myself', 'json'), 120, 120), true);
-						if (count($data) > 0 &&  $data['country']['iso'] != "-")
-							continue;
-				}
-			} else{
-				foreach($uris as $uri)
-				{
-					if ($data['ip']!=$ip || $data['country']['iso'] == "-" || empty($data))
-						$data = json_decode(getURIData(sprintf($uri, $ip, 'json'), 120, 120), true);
-						if (count($data) > 0 &&  $data['country']['iso'] != "-")
-							continue;
+					$data = array();
+					foreach($uris as $uri)
+					{
+						if ($data['ip']==$ip || $data['country']['iso'] == "-" || empty($data))
+							$data = json_decode(getURIData(sprintf($uri, 'myself', 'json'), 120, 120), true);
+							if (count($data) > 0 &&  $data['country']['iso'] != "-")
+								continue;
+					}
+				} else{
+					foreach($uris as $uri)
+					{
+						if ($data['ip']!=$ip || $data['country']['iso'] == "-" || empty($data))
+							$data = json_decode(getURIData(sprintf($uri, $ip, 'json'), 120, 120), true);
+							if (count($data) > 0 &&  $data['country']['iso'] != "-")
+								continue;
+					}
 				}
 			}
-	
+		
 			if (!isset($data['ip']) && empty($data['ip']))
 				$data['ip'] = $ip;
 				
@@ -152,27 +155,34 @@ if (!function_exists("getIPIdentity")) {
 			$_SESSION['ip-identity']['netbios'] = gethostbyaddr($_SESSION['ip-identity']['ipaddy']);
 			$_SESSION['ip-identity']['data'] = array('ipstack' => gethostbynamel($_SESSION['ip-identity']['netbios']));
 			$_SESSION['ip-identity']['domain'] = getBaseDomain("http://".$_SESSION['ip-identity']['netbios']);
-			$_SESSION['ip-identity']['country'] = $data['country']['iso'];
-			$_SESSION['ip-identity']['region'] = $data['location']['region'];
-			$_SESSION['ip-identity']['city'] = $data['location']['city'];
-			$_SESSION['ip-identity']['postcode'] = $data['location']['postcode'];
-			$_SESSION['ip-identity']['timezone'] = "GMT " . $data['location']['gmt'];
-			$_SESSION['ip-identity']['longitude'] = $data['location']['coordinates']['longitude'];
-			$_SESSION['ip-identity']['latitude'] = $data['location']['coordinates']['latitude'];
-			$_SESSION['ip-identity']['last'] = $_SESSION['ip-identity']['created'] = time();
-			$whois = array();
-			$whoisuris = cleanWhitespaces(file(__DIR__  . DIRECTORY_SEPARATOR .  "data" . DIRECTORY_SEPARATOR . "whois.diz"));
-			shuffle($whoisuris); shuffle($whoisuris); shuffle($whoisuris); shuffle($whoisuris);
-			foreach($whoisuris as $uri)
+			if (API_NETWORK_LOGISTICS==true)
 			{
-				if (empty($whois[$_SESSION['ip-identity']['type']]) || !isset($whois[$_SESSION['ip-identity']['type']]))
+				$_SESSION['ip-identity']['country'] = $data['country']['iso'];
+				$_SESSION['ip-identity']['region'] = $data['location']['region'];
+				$_SESSION['ip-identity']['city'] = $data['location']['city'];
+				$_SESSION['ip-identity']['postcode'] = $data['location']['postcode'];
+				$_SESSION['ip-identity']['timezone'] = "GMT " . $data['location']['gmt'];
+				$_SESSION['ip-identity']['longitude'] = $data['location']['coordinates']['longitude'];
+				$_SESSION['ip-identity']['latitude'] = $data['location']['coordinates']['latitude'];
+			}
+			$_SESSION['ip-identity']['last'] = $_SESSION['ip-identity']['created'] = time();
+			
+			$whois = array();
+			if (API_NETWORK_LOGISTICS==true)
+			{
+				$whoisuris = cleanWhitespaces(file(__DIR__  . DIRECTORY_SEPARATOR .  "data" . DIRECTORY_SEPARATOR . "whois.diz"));
+				shuffle($whoisuris); shuffle($whoisuris); shuffle($whoisuris); shuffle($whoisuris);
+				foreach($whoisuris as $uri)
 				{
-					$whois[$_SESSION['ip-identity']['type']] = json_decode(getURIData(sprintf($uri, $_SESSION['ip-identity']['ipaddy'], 'json'), 120, 120), true);
-				} elseif (empty($whois['domain']) || !isset($whois['domain']))
-				{
-					$whois['domain'] = json_decode(getURIData(sprintf($uri, $_SESSION['ip-identity']['domain'], 'json'), 120, 120), true);
-				} else
-					continue;
+					if (empty($whois[$_SESSION['ip-identity']['type']]) || !isset($whois[$_SESSION['ip-identity']['type']]))
+					{
+						$whois[$_SESSION['ip-identity']['type']] = json_decode(getURIData(sprintf($uri, $_SESSION['ip-identity']['ipaddy'], 'json'), 120, 120), true);
+					} elseif (empty($whois['domain']) || !isset($whois['domain']))
+					{
+						$whois['domain'] = json_decode(getURIData(sprintf($uri, $_SESSION['ip-identity']['domain'], 'json'), 120, 120), true);
+					} else
+						continue;
+				}
 			}
 			$wsid = md5(json_encode($whois));
 			$_SESSION['ip-identity']['whois'] = $wsid;
