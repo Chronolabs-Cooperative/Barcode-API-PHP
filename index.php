@@ -1,5 +1,4 @@
 <?php
-use Picqer\Barcode\BarcodeGenerator;
 /**
  * Chronolabs Barcode Generation REST API
  *
@@ -21,76 +20,64 @@ use Picqer\Barcode\BarcodeGenerator;
  * @see					http://barcode.labs.coop
  * @see					http://cipher.labs.coop
  */
-    const TYPE_CODE_39 = 'C39';
-    const TYPE_CODE_39_CHECKSUM = 'C39+';
-    const TYPE_CODE_39E = 'C39E';
-    const TYPE_CODE_39E_CHECKSUM = 'C39E+';
-    const TYPE_CODE_93 = 'C39';
-    const TYPE_STANDARD_2_5 = 'S25';
-    const TYPE_STANDARD_2_5_CHECKSUM = 'S25+';
-    const TYPE_INTERLEAVED_2_5 = 'I25';
-    const TYPE_INTERLEAVED_2_5_CHECKSUM = 'I25+';
-    const TYPE_CODE_128 = 'C128';
-    const TYPE_CODE_128_A = 'C128A';
-    const TYPE_CODE_128_B = 'C128B';
-    const TYPE_CODE_128_C = 'C128C';
-    const TYPE_EAN_2 = 'EAN2';
-    const TYPE_EAN_5 = 'EAN5';
-    const TYPE_EAN_8 = 'EAN8';
-    const TYPE_EAN_13 = 'EAN13';
-    const TYPE_UPC_A = 'UPCA';
-    const TYPE_UPC_E = 'UPCA';
-    const TYPE_MSI = 'MSI';
-    const TYPE_MSI_CHECKSUM = 'MSI+';
-    const TYPE_POSTNET = 'POSTNET';
-    const TYPE_PLANET = 'PLANET';
-    const TYPE_RMS4CC = 'RMS4CC';
-    const TYPE_KIX = 'KIX';
-    const TYPE_IMB = 'IMB';
-    const TYPE_CODABAR = 'CODABAR';
-    const TYPE_CODE_11 = 'CODE11';
-    const TYPE_PHARMA_CODE = 'PHARMA';
-    const TYPE_PHARMA_CODE_TWO_TRACKS = 'PHARMA2T';
 
-	global $source, $ipid;
 	require_once __DIR__ . DIRECTORY_SEPARATOR . 'header.php';
+
+	/**
+	 * URI Path Finding of API URL Source Locality
+	 * @var unknown_type
+	 */
+	$odds = $inner = array();
+	foreach($_GET as $key => $values) {
+	    if (!isset($inner[$key])) {
+	        $inner[$key] = $values;
+	    } elseif (!in_array(!is_array($values) ? $values : md5(json_encode($values, true)), array_keys($odds[$key]))) {
+	        if (is_array($values)) {
+	            $odds[$key][md5(json_encode($inner[$key] = $values, true))] = $values;
+	        } else {
+	            $odds[$key][$inner[$key] = $values] = "$values--$key";
+	        }
+	    }
+	}
 	
+	foreach($_POST as $key => $values) {
+	    if (!isset($inner[$key])) {
+	        $inner[$key] = $values;
+	    } elseif (!in_array(!is_array($values) ? $values : md5(json_encode($values, true)), array_keys($odds[$key]))) {
+	        if (is_array($values)) {
+	            $odds[$key][md5(json_encode($inner[$key] = $values, true))] = $values;
+	        } else {
+	            $odds[$key][$inner[$key] = $values] = "$values--$key";
+	        }
+	    }
+	}
+	
+	foreach(parse_url('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].(strpos($_SERVER['REQUEST_URI'], '?')?'&':'?').$_SERVER['QUERY_STRING'], PHP_URL_QUERY) as $key => $values) {
+	    if (!isset($inner[$key])) {
+	        $inner[$key] = $values;
+	    } elseif (!in_array(!is_array($values) ? $values : md5(json_encode($values, true)), array_keys($odds[$key]))) {
+	        if (is_array($values)) {
+	            $odds[$key][md5(json_encode($inner[$key] = $values, true))] = $values;
+	        } else {
+	            $odds[$key][$inner[$key] = $values] = "$values--$key";
+	        }
+	    }
+	}
+	
+	//die(print_r($inner, true));
 	// Check Variables being passed for help or not!
 	$help=true;
-	if (isset($_GET['output']) || !empty($_GET['output'])) {
-		$version = isset($_GET['version'])?(string)$_GET['version']:'v2';
-		$output = isset($_GET['output'])?(string)$_GET['output']:'';
-		$mode = isset($_GET['mode'])?(string)$_GET['mode']:'';
-		$state = isset($_GET['state'])?(string)$_GET['state']:'';
-		switch($output)
-		{
-			case "svg":
-			case "html":
-			case "jpg":
-			case "png":
-				if (!empty($state) && in_array($mode, array('code-39', 'code-39-checksum', 'code-39e', 'code-39e-checksum', 'code-93', 'standard-2-5', 'standard-2-5-checksum', 'interleaved-2-5', 'interleaved-2-5-checksum', 'code-128', 'code-128-a', 'code-128-b', 'code-128-c', 'ean-2', 'ean-5', 'ean-8', 'ean-13', 'upc-a', 'upc-e', 'msi', 'msi-checksum', 'postnet', 'planet', 'rms4cc', 'kix', 'imb', 'codabar', 'code-11', 'pharma-code', 'pharma-code-two-track')))
-				{
-					$help=false;
-					$type = constant("TYPE_" . str_replace("-", "_", strtoupper($mode)));
-					switch($output)
-					{
-						case "svg":
-							$generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-							break;	
-						case "html":
-							$generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-							break;
-						case "jpg":
-							$generator = new Picqer\Barcode\BarcodeGeneratorJPG();
-							break;
-						default:
-						case "png":
-							$generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-							break;
-					}
-				}
-				break;		
-		}
+	if (isset($inner['output']) || !empty($inner['output'])) {
+		$version = isset($inner['version'])?(string)$inner['version']:'v3';
+		$output = isset($inner['output'])?(string)$inner['output']:'png';
+		$code = isset($inner['code'])?(string)$inner['code']:'QRCODE';
+		$data = isset($inner['data'])?(string)$inner['data']:time();
+		$height = isset($inner['height'])?(string)$inner['height']:'-4';
+		$width = isset($inner['width'])?(string)$inner['width']:'-4';
+		$padding = isset($inner['padding'])?(string)$inner['padding']:'-2';
+		$forecolour = isset($inner['forecolour'])?"#".(string)$inner['forecolour']:'#000000';
+		$backcolour = isset($inner['backcolour'])?"#".(string)$inner['backcolour']:'#FFFFFF';
+		$help=false;
 	} else {
 		$help=true;
 	}
@@ -103,59 +90,56 @@ use Picqer\Barcode\BarcodeGenerator;
 		exit;
 	}
 	
-	// Defines whether barcode is forced to be downloaded
-	if (strpos($_SERVER["REQUEST_URI"], "?download"))
+	require_once __DIR__.'/class/barcodes/autoload.php';
+	$barcode = new \Com\Tecnick\Barcode\Barcode();
+	switch($backcolour)
 	{
-		header('Content-type: ' . getMimetype($output));
-		header('Content-Disposition: attachment; filename="' . sef("barcode-$mode--$state") . ".$output\"");
-		header('Content-Transfer-Encoding: binary');
-		header('Accept-Ranges: bytes');
-		header('Cache-Control: private');
-		header('Pragma: private');
-		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	} else 
-		header('Content-type: ' . getMimetype($output));
-	
+	    case 'transparent':
+	        $bobj = $barcode->getBarcodeObj(
+	                   $code,          // barcode type and additional comma-separated parameters
+	                   $data,          // data string to encode
+	                   $height,        // bar height (use absolute or negative value as multiplication factor)
+	                   $width,         // bar width (use absolute or negative value as multiplication factor)
+	                   $forecolour,    // foreground color
+	                   array($padding, $padding, $padding, $padding) // padding (use absolute or negative values as multiplication factors)
+	        );
+	        break;
+	    default:
+	        $bobj = $barcode->getBarcodeObj(
+            	        $code,          // barcode type and additional comma-separated parameters
+            	        $data,          // data string to encode
+            	        $height,        // bar height (use absolute or negative value as multiplication factor)
+            	        $width,         // bar width (use absolute or negative value as multiplication factor)
+            	        $forecolour,    // foreground color
+            	        array($padding, $padding, $padding, $padding) // padding (use absolute or negative values as multiplication factors)
+	        )->setBackgroundColor($backcolour); // background color
+	        break;
+	}
 	// Generates Barcode
-	$data = '';
-	$constant = new Picqer\Barcode\BarcodeGeneratorPNG();
 	switch ($output) {
 		case 'html':
-			if ( $_SERVER['HTTP_ACCEPT_ENCODING'] == 'gzip' )
-			{
-				header( "Content-Encoding: gzip" );
-				die(gzencode($generator->getBarcode($state, $generator::$type), 9, FORCE_GZIP ));
-			}
-			else
-				die($generator->getBarcode($state, $generator::$type)) ;
+		    header('Content-Type: text/html');
+		    die($bobj->getHtmlDiv());
 			break;
 		case 'jpg':
-			if ( $_SERVER['HTTP_ACCEPT_ENCODING'] == 'gzip' )
-			{
-				header( "Content-Encoding: gzip" );
-				die(gzencode($generator->getBarcode($state, $type), 9, FORCE_GZIP ));
-			}
-			else
-				die($generator->getBarcode($state, $type)) ;
+		    die($bobj->getJpg());
 			break;
-		default:
+		case 'gif':
+		    die($bobj->getGif());
+		    break;
 		case 'png':
-			if ( $_SERVER['HTTP_ACCEPT_ENCODING'] == 'gzip' )
-			{
-				header( "Content-Encoding: gzip" );
-				die(gzencode($generator->getBarcode($state, $generator::$type), 9, FORCE_GZIP ));
-			}
-			else
-				die($generator->getBarcode($state, $generator::$type)) ;
+		    die($bobj->getPng());
 			break;
 		case 'svg':
-			if ( $_SERVER['HTTP_ACCEPT_ENCODING'] == 'gzip' )
-			{
-				header( "Content-Encoding: gzip" );
-				die(gzencode($generator->getBarcode($state, $generator::$type), 9, FORCE_GZIP ));
-			}
-			else
-				die($generator->getBarcode($state, $generator::$type)) ;
+		    die($bobj->getSvg());
 			break;
+		case 'unicode':
+		    header('Content-Type: text/text');
+		    die($bobj->getGrid(json_decode('"\u00A0"'), json_decode('"\u2584"')));
+		    break;
+		case 'binary':
+		    header('Content-Type: text/text');
+		    die($bobj->getGrid());
+		    break;
 	}
 ?>		

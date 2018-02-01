@@ -25,85 +25,87 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta property="og:title" content="<?php echo API_VERSION; ?>"/>
+<meta property="og:type" content="api<?php echo API_TYPE; ?>"/>
+<meta property="og:image" content="<?php echo API_URL; ?>/assets/images/logo_500x500.png"/>
+<meta property="og:url" content="<?php echo (isset($_SERVER["HTTPS"])?"https://":"http://").$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]; ?>" />
+<meta property="og:site_name" content="<?php echo API_VERSION; ?> - <?php echo API_LICENSE_COMPANY; ?>"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="rating" content="general" />
+<meta http-equiv="<?php echo $place['iso2']; ?>thor" content="wishcraft@users.sourceforge.net" />
+<meta http-equiv="copyright" content="<?php echo API_LICENSE_COMPANY; ?> &copy; <?php echo date("Y"); ?>" />
+<meta http-equiv="generator" content="Chronolabs Cooperative (<?php echo $place['iso3']; ?>)" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo API_VERSION; ?> || <?php echo API_LICENSE_COMPANY; ?></title>
+<!-- AddThis Smart Layers BEGIN -->
+<!-- Go to http://www.addthis.com/get/smart-layers to customize -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50f9a1c208996c1d"></script>
+<script type="text/javascript">
+  addthis.layers({
+	'theme' : 'transparent',
+	'share' : {
+	  'position' : 'right',
+	  'numPreferredServices' : 6
+	}, 
+	'follow' : {
+	  'services' : [
+		{'service': 'facebook', 'id': 'ChronolabsCoop'},
+		{'service': 'twitter', 'id': 'AntonyXaies'},
+		{'service': 'twitter', 'id': 'ChronolabsCoop'},
+		{'service': 'twitter', 'id': 'OpenRend'},
+	  ]
+	},  
+	'whatsnext' : {},  
+	'recommended' : {
+	  'title': 'Recommended for you:'
+	} 
+  });
+</script>
+<!-- AddThis Smart Layers END -->
+<link rel="stylesheet" href="<?php echo API_URL; ?>/assets/css/style.css" type="text/css" />
+<!-- Custom Fonts -->
+<link href="<?php echo API_URL; ?>/assets/media/Labtop/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Labtop Bold/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Labtop Bold Italic/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Labtop Italic/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Labtop Superwide Boldish/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Labtop Thin/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Labtop Unicase/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/LHF Matthews Thin/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Life BT Bold/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Life BT Bold Italic/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Prestige Elite/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Prestige Elite Bold/style.css" rel="stylesheet" type="text/css">
+<link href="<?php echo API_URL; ?>/assets/media/Prestige Elite Normal/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo API_URL; ?>/assets/css/gradients.php" type="text/css" />
+<link rel="stylesheet" href="<?php echo API_URL; ?>/assets/css/shadowing.php" type="text/css" />
 
-	<?php 	$servicename = "Barcoding Generation Services"; 
-		$servicecode = "BGS"; ?>
-	<meta property="og:url" content="<?php echo (isset($_SERVER["HTTPS"])?"https://":"http://").$_SERVER["HTTP_HOST"]; ?>" />
-	<meta property="og:site_name" content="<?php echo $servicename; ?> Open Services API's (With Source-code)"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="rating" content="general" />
-	<meta http-equiv="author" content="wishcraft@users.sourceforge.net" />
-	<meta http-equiv="copyright" content="Chronolabs Cooperative &copy; <?php echo date("Y")-1; ?>-<?php echo date("Y")+1; ?>" />
-	<meta http-equiv="generator" content="wishcraft@users.sourceforge.net" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="shortcut icon" href="//labs.partnerconsole.net/execute2/external/reseller-logo">
-	<link rel="icon" href="//labs.partnerconsole.net/execute2/external/reseller-logo">
-	<link rel="apple-touch-icon" href="//labs.partnerconsole.net/execute2/external/reseller-logo">
-	<meta property="og:image" content="//labs.partnerconsole.net/execute2/external/reseller-logo"/>
-	<link rel="stylesheet" href="/style.css" type="text/css" />
-	<link rel="stylesheet" href="//css.ringwould.com.au/3/gradientee/stylesheet.css" type="text/css" />
-	<link rel="stylesheet" href="//css.ringwould.com.au/3/shadowing/styleheet.css" type="text/css" />
-	<title><?php echo $servicename; ?> (<?php echo $servicecode; ?>) Open API || Chronolabs Cooperative</title>
-	<meta property="og:title" content="<?php echo $servicecode; ?> API"/>
-	<meta property="og:type" content="<?php echo strtolower($servicecode); ?>-api"/>
-	<!-- AddThis Smart Layers BEGIN -->
-	<!-- Go to http://www.addthis.com/get/smart-layers to customize -->
-	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50f9a1c208996c1d"></script>
-	<script type="text/javascript">
-	  addthis.layers({
-		'theme' : 'transparent',
-		'share' : {
-		  'position' : 'right',
-		  'numPreferredServices' : 6
-		}, 
-		'follow' : {
-		  'services' : [
-			{'service': 'twitter', 'id': 'ChronolabsCoop'},
-			{'service': 'twitter', 'id': 'Cipherhouse'},
-			{'service': 'twitter', 'id': 'OpenRend'},
-			{'service': 'facebook', 'id': 'Chronolabs'},
-			{'service': 'linkedin', 'id': 'founderandprinciple'},
-			{'service': 'google_follow', 'id': '105256588269767640343'},
-			{'service': 'google_follow', 'id': '116789643858806436996'}
-		  ]
-		},  
-		'whatsnext' : {},  
-		'recommended' : {
-		  'title': 'Recommended for you:'
-		} 
-	  });
-	</script>
-	<!-- AddThis Smart Layers END -->
 </head>
+
 <body>
 <div class="main">
-    <h1><?php echo $servicename; ?> (<?php echo $servicecode; ?>) Open API || Chronolabs Cooperative</h1>
+	<img style="float: right; margin: 11px; width: auto; height: auto; clear: none;" src="<?php echo API_URL; ?>/assets/images/logo_350x350.png" />
+    <h1><?php echo API_VERSION; ?> -- <?php echo API_LICENSE_COMPANY; ?></h1>
     <p style="text-align: justify; font-size: 169.2356897%; font-weight: 400">This is an API Service for generating barcodes, of all types commonality, with the option to force them to download or embedment in a PDF or HTML Page just follow the guide below on how to do this!</p>
-    <h2>Code API Documentation</h2>
-    <p>You can find the phpDocumentor code API documentation at the following path :: <a href="<?php echo API_URL; ?>/docs/" target="_blank"><?php echo API_URL; ?>/docs/</a>. These should outline the source code core functions and classes for the API to function!</p>   
-	<?php foreach(array('jpg', 'png', 'svg', 'html') as $format) { 
-		$string = getRandomArrayString(getIPIdentity('', true));
-	?>
+    <?php foreach(array('gif', 'jpg', 'png', 'svg', 'html', 'unicode', 'binary') as $format) { ?>
     <h2><?php echo strtoupper($format); ?> Document Output</h2>
-    <p>This is done with the <em>.<?php echo $format; ?></em> extension at the end of the url, this is for the functions for barcodes to be generated in a mimetype of <strong><?php echo getMimetype($format); ?>!</strong></p>
+    <p>This is done with the <em>.<?php echo $format; ?></em> extension at the end of the url, this is for the functions for barcodes to be generated as an image or data outputs!</strong></p>
     <blockquote>
-    	<?php foreach(array('code-39', 'code-39-checksum', 'code-39e', 'code-39e-checksum', 'code-93', 'standard-2-5', 'standard-2-5-checksum', 'interleaved-2-5', 'interleaved-2-5-checksum', 'code-128', 'code-128-a', 'code-128-b', 'code-128-c', 'ean-2', 'ean-5', 'ean-8', 'ean-13', 'upc-a', 'upc-e', 'msi', 'msi-checksum', 'postnet', 'planet', 'rms4cc', 'kix', 'imb', 'codabar', 'code-11', 'pharma-code', 'pharma-code-two-track') as $mode) { ?>
-        <font color="#001201">Barcode format is "<?php echo ucwords(str_replace("-", " ", $mode)); ?>" which will generate the text: '<em><?php echo $string; ?></em>' in the format of <strong><?php echo getMimetype($format); ?></strong>!</font><br/>
-        <em><strong><a href="<?php echo API_URL; ?>/v2/<?php echo urlencode($string); ?>/<?php echo $mode; ?>.<?php echo $format; ?>" target="_blank"><?php echo API_URL; ?>/v2/<?php echo urlencode($string); ?>/<?php echo $mode; ?>.<?php echo $format; ?></a></strong></em><br /><br />
-        <font color="#001201">Barcode download is forced in format "<?php echo ucwords(str_replace("-", " ", $mode)); ?>" of the text: '<em><?php echo $string; ?></em>' in the format of <strong><?php echo getMimetype($format); ?></strong>!</font><br/>
-        <em><strong><a href="<?php echo API_URL; ?>/v2/<?php echo urlencode($string); ?>/<?php echo $mode; ?>.<?php echo $format; ?>?download" target="_blank"><?php echo API_URL; ?>/v2/<?php echo urlencode($string); ?>/<?php echo $mode; ?>.<?php echo $format; ?>?download</a></strong></em><br /><br />
-		<?php } ?>
+    	<?php foreach(getBarcodes() as $code => $title) { ?>
+    	<?php $string = chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('A'), ord('Z'))) . chr(mt_rand(ord('A'), ord('Z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('0'), ord('9'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))); ?>
+        <font class="help-title-text">Outputs Barcode format is "<?php echo ucwords($title); ?>" will generate text: '<em><?php echo $string; ?></em>' which is 000000 with a background of FFFFFF; with the width of :: <?php echo $width = mt_rand(-20,20); ?> as well as the height :: <?php echo $height = mt_rand(-20,20); ?> and with the padding of  :: <?php echo $padding = mt_rand(-8,8); ?></em>!</font><br/>
+        <font class="help-url-example"><a href="<?php echo API_URL; ?>/v3/<?php echo $string; ?>/<?php echo $width; ?>/<?php echo $height; ?>/<?php echo $padding; ?>/FFFFFF/000000/<?php echo $code; ?>,H.<?php echo $format; ?>" target="_blank"><?php echo API_URL; ?>/v3/<?php echo $string; ?>/<?php echo $width; ?>/<?php echo $height; ?>/<?php echo $padding; ?>/FFFFFF/000000/<?php echo $code; ?>.<?php echo $format; ?></a></font><br />
+        <?php $string = chr(mt_rand(ord('A'), ord('Z'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('A'), ord('Z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))); ?>
+        <font class="help-title-text">Outputs Barcode format is "<?php echo ucwords($title); ?>" will generate text: '<em><?php echo $string; ?></em>' which is 000000 with a background of FFFFFF; with the width of :: <?php echo $width = mt_rand(-20,20); ?> as well as the height :: <?php echo $height = mt_rand(-20,20); ?> and with the padding of  :: <?php echo $padding = mt_rand(-8,8); ?>; this is with the extended parameter of H as: <em><?php echo $code; ?>,H</em>!</font><br/>
+        <font class="help-url-example"><a href="<?php echo API_URL; ?>/v3/<?php echo $string; ?>/<?php echo $width; ?>/<?php echo $height; ?>/<?php echo $padding; ?>/FFFFFF/000000/<?php echo $code; ?>,H.<?php echo $format; ?>" target="_blank"><?php echo API_URL; ?>/v3/<?php echo $string; ?>/<?php echo $width; ?>/<?php echo $height; ?>/<?php echo $padding; ?>/FFFFFF/000000/<?php echo $code; ?>,H.<?php echo $format; ?></a></font><br />
+        <?php $string = chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('A'), ord('Z'))) . chr(mt_rand(ord('0'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))) . chr(mt_rand(ord('a'), ord('z'))) . chr(mt_rand(ord('1'), ord('9'))); ?>
+        <font class="help-title-text">Forces Download of Barcode format is "<?php echo ucwords($title); ?>" will generate text: '<em><?php echo $string; ?></em>' which is 000000 with a background of FFFFFF; with the width of :: <?php echo $width = mt_rand(-20,20); ?> as well as the height :: <?php echo $height = mt_rand(-20,20); ?> and with the padding of  :: <?php echo $padding = mt_rand(-8,8); ?></em>!</font><br/>
+        <font class="help-url-example"><a href="<?php echo API_URL; ?>/v3/<?php echo $string; ?>/<?php echo $width; ?>/<?php echo $height; ?>/<?php echo $padding; ?>/FFFFFF/000000/<?php echo $code; ?>,H.<?php echo $format; ?>?download" target="_blank"><?php echo API_URL; ?>/v3/<?php echo $string; ?>/<?php echo $width; ?>/<?php echo $height; ?>/<?php echo $padding; ?>/FFFFFF/000000/<?php echo $code; ?>.<?php echo $format; ?>?download</a></font><br /><br />
+        <?php } ?>
 	</blockquote>
     <?php } ?>
-  	<?php if (file_exists($fionf = __DIR__ .  DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'apis-localhost.html')) {
-    	readfile($fionf);
-    }?>	
-    <?php if (!in_array(whitelistGetIP(true), whitelistGetIPAddy())) { ?>
-    <h2>Limits</h2>
-    <p>There is a limit of <?php echo MAXIMUM_QUERIES; ?> queries per hour. You can add yourself to the whitelist by using the following form API <a href="http://whitelist.<?php echo domain; ?>/">Whitelisting form (whitelist.<?php echo domain; ?>)</a>. This is only so this service isn't abused!!</p>
-    <?php } ?>
     <h2>The Author</h2>
-    <p>This was developed by Simon Roberts in 2013 and is part of the Chronolabs System and api's.<br/><br/>This is open source which you can download from <a href="https://sourceforge.net/projects/chronolabsapis/">https://sourceforge.net/projects/chronolabsapis/</a> contact the scribe  <a href="mailto:wishcraft@users.sourceforge.net">wishcraft@users.sourceforge.net</a></p></body>
+    <p>This was developed by Simon Roberts in 2018 and is part of the Chronolabs System and api's.<br/><br/>This is open source which you can download from <a href="https://sourceforge.net/projects/chronolabsapis/">https://sourceforge.net/projects/chronolabsapis/</a> contact the scribe  <a href="mailto:chronolabscoop@users.sourceforge.net">chronolabscoop@users.sourceforge.net</a><br/><br/>You can get this source code from the following repository: <a href="https://github.com/Chronolabs-Cooperative/Barcode-API-PHP" target="_blank">https://github.com/Chronolabs-Cooperative/Barcode-API-PHP</a></p></body>
 </div>
 </html>
 <?php 
